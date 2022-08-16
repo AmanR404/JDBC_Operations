@@ -10,10 +10,11 @@ class MyDatabaseException extends Exception{
         return "Error...Unable to update";
     }
 }
-public class JDBCPreparedStatement {
+public class JDBCStatement {
     static Connection connection;
+    static ResultSet resultSet;
     @Test
-    public static void main(String[] args) {
+    public static void main(String[] args){
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
         String password = "Arai@3313";
@@ -28,15 +29,17 @@ public class JDBCPreparedStatement {
             e.printStackTrace();
         }
         try{
-            PreparedStatement preparedStmt = connection.prepareStatement("update employee_payroll set salary = '300000' where name = 'Govind'");
-            preparedStmt.executeUpdate();
+            Statement Stmt = connection.createStatement();
+            String sql1 = "update employee_payroll set salary = '300000' where name = 'Govind'";
+            Stmt.executeUpdate(sql1);
         }
         catch(Exception e){
             System.out.println(e.toString());
         }
         try{
-            PreparedStatement preparedStmt2 = connection.prepareStatement("select salary from employee_payroll where name = 'Govind'");
-            ResultSet resultSet = preparedStmt2.executeQuery();
+            Statement Stmt2 = connection.createStatement();
+            String sql2 = "select salary from employee_payroll where name = 'Govind'";
+            resultSet = Stmt2.executeQuery(sql2);
             while(resultSet.next()){
                 System.out.println(resultSet.getString("Salary"));
             }
@@ -44,7 +47,12 @@ public class JDBCPreparedStatement {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-        Assert.assertEquals(300000,resultSet.getString("Salary"));
+        try{
+            Assert.assertEquals(300000,resultSet.getString("Salary"));
+        }
+        catch(Exception e){
+            System.out.println("Error..Unable to Test");
+        }
     }
 }
 
