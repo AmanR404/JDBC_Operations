@@ -1,4 +1,5 @@
 import java.sql.*;
+import org.junit.*;
 class MyDatabaseException extends Exception{
     @Override
     public String getMessage() {
@@ -11,6 +12,7 @@ class MyDatabaseException extends Exception{
 }
 public class JDBCPreparedStatement {
     static Connection connection;
+    @Test
     public static void main(String[] args) {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
@@ -33,15 +35,16 @@ public class JDBCPreparedStatement {
             System.out.println(e.toString());
         }
         try{
-            PreparedStatement preparedStmt2 = connection.prepareStatement("select * from employee_payroll");
+            PreparedStatement preparedStmt2 = connection.prepareStatement("select salary from employee_payroll where name = 'Govind'");
             ResultSet resultSet = preparedStmt2.executeQuery();
             while(resultSet.next()){
-                System.out.println(resultSet.getString("name")+ " " + resultSet.getString("Salary") + " " + resultSet.getString("start_date"));
+                System.out.println(resultSet.getString("Salary"));
             }
         }
         catch(Exception e){
             System.out.println(e.getMessage());
         }
+        Assert.assertEquals(300000,resultSet.getString("Salary"));
     }
 }
 
