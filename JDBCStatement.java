@@ -1,5 +1,4 @@
 import java.sql.*;
-import org.junit.*;
 class MyDatabaseException extends Exception{
     @Override
     public String getMessage() {
@@ -13,7 +12,6 @@ class MyDatabaseException extends Exception{
 public class JDBCStatement {
     static Connection connection;
     static ResultSet resultSet;
-    @Test
     public static void main(String[] args){
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
@@ -29,29 +27,14 @@ public class JDBCStatement {
             e.printStackTrace();
         }
         try{
-            Statement Stmt = connection.createStatement();
-            String sql1 = "update employee_payroll set salary = '300000' where name = 'Govind'";
-            Stmt.executeUpdate(sql1);
-        }
-        catch(Exception e){
-            System.out.println(e.toString());
-        }
-        try{
-            Statement Stmt2 = connection.createStatement();
-            String sql2 = "select salary from employee_payroll where name = 'Govind'";
-            resultSet = Stmt2.executeQuery(sql2);
+            PreparedStatement preparedStmt2 = connection.prepareStatement("select * from employee_payroll where start between cast('2022-08-12' as date) and date(now())");
+            resultSet = preparedStmt2.executeQuery();
             while(resultSet.next()){
-                System.out.println(resultSet.getString("Salary"));
+                System.out.println(resultSet.getString("name")+ " " + resultSet.getString("salary"));
             }
         }
         catch(Exception e){
             System.out.println(e.getMessage());
-        }
-        try{
-            Assert.assertEquals(300000,resultSet.getString("Salary"));
-        }
-        catch(Exception e){
-            System.out.println("Error..Unable to Test");
         }
     }
 }
