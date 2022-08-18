@@ -2,7 +2,7 @@ import java.sql.*;
 class MyDatabaseException extends Exception{
     @Override
     public String getMessage() {
-        return "Database not found";
+        return "Unable to Retrieve DB";
     }
     @Override
     public String toString() {
@@ -12,7 +12,10 @@ class MyDatabaseException extends Exception{
 public class JDBCStatement {
     static Connection connection;
     static ResultSet resultSet;
-    public static void main(String[] args){
+    static String idarr[] = new String[3];
+    static String namearr[] = new String[3];
+    static String salaryarr[] = new String[3];
+    public static void main(String[] args) throws SQLException{
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
         String password = "Arai@3313";
@@ -27,15 +30,34 @@ public class JDBCStatement {
             e.printStackTrace();
         }
         try{
-            PreparedStatement preparedStmt2 = connection.prepareStatement("select * from employee_payroll where start between cast('2022-08-12' as date) and date(now())");
-            resultSet = preparedStmt2.executeQuery();
-            while(resultSet.next()){
-                System.out.println(resultSet.getString("name")+ " " + resultSet.getString("salary"));
-            }
+            PreparedStatement preparedstmt1 = connection.prepareStatement("insert into employee_payroll (id,name,salary) values (3,'Ameen',40000)");
+            preparedstmt1.executeUpdate();
+            // connection.commit();
         }
         catch(Exception e){
-            System.out.println(e.getMessage());
+            System.out.println(e.toString());
         }
-    }
+
+        try{
+            PreparedStatement preparedStmt2 = connection.prepareStatement("select * from employee_payroll");
+            resultSet = preparedStmt2.executeQuery();
+            int i = 0;
+            while(resultSet.next()){
+                idarr[i] = resultSet.getString("id");
+                namearr[i] = resultSet.getString("name");
+                salaryarr[i] = resultSet.getString("salary"); 
+                i++;
+            }
+        }
+        catch(SQLException e){
+            System.out.println(e.getMessage());
+            // connection.rollback();
+        }
+        for(int i = 0;i < idarr.length;i++){
+            System.out.print(idarr[i] + " ");
+            System.out.print(namearr[i] + " ");
+            System.out.print(salaryarr[i] + " \n");
+        }
+        }
 }
 
