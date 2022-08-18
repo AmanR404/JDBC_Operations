@@ -8,6 +8,7 @@ class MyDatabaseException extends Exception{
 }
 public class JDBCPreparedStatement {
     static Connection connection;
+    @Test
     public static void main(String[] args) {
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
@@ -33,6 +34,7 @@ public class JDBCPreparedStatement {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
+        Assert.AssertEquals("Aman",resultSet.getString("name"));
     }
 }
 
