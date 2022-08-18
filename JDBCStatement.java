@@ -33,8 +33,10 @@ public class JDBCStatement {
             e.printStackTrace();
         }
         try{
+            connection.setAutoCommit(false);
             PreparedStatement preparedstmt1 = connection.prepareStatement("insert into employee_payroll (id,name,salary) values (3,'Ameen',40000)");
             preparedstmt1.executeUpdate();
+            connection.commit();
         }
         catch(Exception e){
             System.out.println(e.toString());
@@ -53,6 +55,7 @@ public class JDBCStatement {
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
+            connection.rollback();
         }
         for(int i = 0;i < idarr.length;i++){
             System.out.print(idarr[i] + " ");
