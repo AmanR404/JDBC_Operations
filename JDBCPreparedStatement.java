@@ -34,7 +34,7 @@ public class JDBCPreparedStatement {
         catch(Exception e){
             System.out.println(e.getMessage());
         }
-        Assert.AssertEquals("Aman",resultSet.getString("name"));
+        Assert.assertEquals("Aman", resultSet.getString("name"));
     }
 }
 
