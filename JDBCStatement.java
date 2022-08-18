@@ -1,4 +1,6 @@
 import java.sql.*;
+import org.junit.Assert;
+import org.junit.Test;
 class MyDatabaseException extends Exception{
     @Override
     public String getMessage() {
@@ -15,6 +17,7 @@ public class JDBCStatement {
     static String idarr[] = new String[3];
     static String namearr[] = new String[3];
     static String salaryarr[] = new String[3];
+    @Test
     public static void main(String[] args) throws SQLException{
         String jdbcURL = "jdbc:mysql://localhost:3306/payroll_service?useSSL=false";
         String userName = "root";
@@ -32,7 +35,6 @@ public class JDBCStatement {
         try{
             PreparedStatement preparedstmt1 = connection.prepareStatement("insert into employee_payroll (id,name,salary) values (3,'Ameen',40000)");
             preparedstmt1.executeUpdate();
-            // connection.commit();
         }
         catch(Exception e){
             System.out.println(e.toString());
@@ -51,13 +53,13 @@ public class JDBCStatement {
         }
         catch(SQLException e){
             System.out.println(e.getMessage());
-            // connection.rollback();
         }
         for(int i = 0;i < idarr.length;i++){
             System.out.print(idarr[i] + " ");
             System.out.print(namearr[i] + " ");
             System.out.print(salaryarr[i] + " \n");
         }
+        Assert.assertEquals("Aman", namearr[0]);
         }
 }
 
